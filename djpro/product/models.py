@@ -9,3 +9,10 @@ class Book(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def dict(self):
+        return {
+            'id': self.pk,
+            'name': self.name,
+            'price': self.price
+        }

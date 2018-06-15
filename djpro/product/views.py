@@ -1,5 +1,7 @@
 from rest_framework.views import APIView
 
+from common.api import validate_serializer
+from common.decorators import login_required
 from common.views import success_response, serializer_error_reason, serializer_error
 from product.models import Book
 from product.serializers import BookSerializer, BookUpdateSerializer
@@ -11,13 +13,11 @@ class BookListView(APIView):
         serializer = BookSerializer(queryset, many=True)
         return success_response({'list': serializer.data})
 
+    @login_required
+    @validate_serializer(BookSerializer)
     def post(self, request):
-        serializer = BookSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return success_response()
-        else:
-            return serializer_error(serializer)
+        book_obj = Book.objects.create(**request.value)
+        return success_response(book_obj.dict())
 
 
 class BookView(APIView):

@@ -1,3 +1,4 @@
+from decimal import Decimal
 from rest_framework.response import Response
 
 from common.err_code import my_error_code
@@ -12,13 +13,13 @@ def success_response(data=''):
     return Response(data={'code': 0, 'msg': '成功', 'data': data})
 
 
-def error_response(reason, data=''):
+def error_response(reason, data=None):
     """
     :param reason: key of my_error_code in error_code.py
     :param data: 
     :return: 
     """
-    return Response(data={'code': reason[0], 'msg': reason[1], 'data': data})
+    return Response(data={'code': reason[0], 'msg': reason[1], 'data': data if data else ''})
 
 
 def serializer_error_reason(serializer):
@@ -39,5 +40,15 @@ def serializer_error(serializer):
     :return: 
     """
     if settings.DEBUG:
-        return serializer_error_reason(serializer)
+        return error_response(my_error_code['SERIALIZER_ERROR'], serializer_error_reason(serializer))
     return error_response(my_error_code['SERIALIZER_ERROR'])
+
+
+def format_decimal(decimal):
+    """
+    decimal to str
+    保留两位小数
+    :param decimal: 
+    :return: 
+    """
+    return str(round(decimal + Decimal(0.001), 2))
