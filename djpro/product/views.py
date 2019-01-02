@@ -5,6 +5,7 @@ from common.decorators import login_required
 from common.views import success_response, serializer_error_reason, serializer_error
 from product.models import Book
 from product.serializers import BookSerializer, BookUpdateSerializer
+from product.tasks import add
 
 
 class BookListView(APIView):
@@ -44,4 +45,10 @@ class BookView(APIView):
         book_obj = Book.get(pk=pk)
         book_obj.del_flag = True
         book_obj.save()
+        return success_response()
+
+
+class TasksView(APIView):
+    def get(self, request):
+        add.delay(1, 2)
         return success_response()

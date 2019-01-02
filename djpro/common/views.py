@@ -1,8 +1,12 @@
 from decimal import Decimal
+
+import logging
 from rest_framework.response import Response
 
 from common.err_code import my_error_code
 from djpro import settings
+
+logger = logging.getLogger('app_info')
 
 
 def success_response(data=''):
@@ -41,6 +45,7 @@ def serializer_error(serializer):
     """
     if settings.DEBUG:
         return error_response(my_error_code['SERIALIZER_ERROR'], serializer_error_reason(serializer))
+    logger.info(serializer_error_reason(serializer))
     return error_response(my_error_code['SERIALIZER_ERROR'])
 
 

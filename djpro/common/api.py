@@ -7,7 +7,7 @@ def validate_serializer(serializer):
     """
     @validate_serializer(TestSerializer)
     def post(self, request):
-        return self.success(request.data)
+        return self.success(request.value)
     """
 
     def validate(func):
