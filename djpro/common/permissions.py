@@ -1,10 +1,14 @@
 import functools
 
-from common.err_code import my_error_code
-from common.views import error_response
+from common.api import R
+
+"""
+权限定义及相关处理逻辑
+用于APIView的permission_classes中
+"""
 
 
-class BasePermissionDecorator(object):
+class BasePermissionDecorator:
     def __init__(self, func):
         self.func = func
 
@@ -12,7 +16,7 @@ class BasePermissionDecorator(object):
         return functools.partial(self.__call__, obj)
 
     def error(self):
-        return error_response(my_error_code['PERMISSION_DENIED'])
+        return R.error('permission_denied')
 
     def __call__(self, *args, **kwargs):
         self.request = args[1]
@@ -22,9 +26,9 @@ class BasePermissionDecorator(object):
             return self.error()
 
     def check_permission(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
-class login_required(BasePermissionDecorator):
+class LoginRequired(BasePermissionDecorator):
     def check_permission(self):
         return self.request.user.is_authenticated

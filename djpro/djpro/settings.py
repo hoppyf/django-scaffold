@@ -16,12 +16,14 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ENV = os.environ.get('env', 'local')
+MODE = os.environ.get('mode', 'local')
 
-if ENV == 'local':
-    from .local import *
-elif ENV == 'server':
-    from .server import *
+if MODE == 'develop':
+    from .config.local import *
+elif MODE == 'production':
+    from .config.production import *
+else:
+    from .config.local import *
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,7 +35,6 @@ INSTALLED_APPS = [
 
     # third part
     'rest_framework',
-    'rest_framework.authtoken',
 
     # app
     'common',
@@ -101,10 +102,10 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'common.utils.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'common.api.custom_exception_handler',
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('',),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
@@ -116,21 +117,18 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
         'standard': {
-            'format': '%(asctime)s %(levelname)s --> %(message)s'
-        }
+            'format': '[%(asctime)s] [%(levelname)s] %(message)s'
+        },
     },
     'handlers': {
         'django_error': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': LOG_PATH + 'django.log',
-            'formatter': 'standard'
-        },
-        'app_info': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': LOG_PATH + 'app_info.log',
             'formatter': 'standard'
         },
         'console': {
@@ -140,11 +138,6 @@ LOGGING = {
         }
     },
     'loggers': {
-        'app_info': {
-            'handlers': ['app_info', 'console'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
         'django.request': {
             'handlers': ['django_error', 'console'],
             'level': 'DEBUG',

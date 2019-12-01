@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 
 from common.api import validate_serializer
-from common.decorators import login_required
+from common.permissions import login_required
 from common.views import success_response, serializer_error_reason, serializer_error
 from product.models import Book
 from product.serializers import BookSerializer, BookUpdateSerializer

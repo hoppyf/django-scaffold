@@ -1,5 +1,10 @@
 from django.contrib.auth.base_user import BaseUserManager
 
+"""
+使用自定义用户模块需要rewrite用户的objects
+根据表结构进行修改
+"""
+
 
 class MyUserManager(BaseUserManager):
     def _create_user(self, phone, password, **extra_fields):

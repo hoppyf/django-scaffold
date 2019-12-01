@@ -1,12 +1,7 @@
-import json
-
-import logging
-from django.http import HttpResponse
-
-logger = logging.getLogger('app_info')
-
-
 class ErrorMiddleware:
+    """
+    异常处理中间件，可以hack异常处理，之前用于hack 500的情况，现在弃用
+    """
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -16,7 +11,4 @@ class ErrorMiddleware:
         return response
 
     def process_exception(self, request, exception):
-        logger.error(
-            'path:{} method:{} user:{} --> why:{}'.format(request.path, request.method, request.user, exception))
-        return HttpResponse(json.dumps({'code': '500', 'msg': '系统异常', 'data': ''}, ensure_ascii=False),
-                            content_type='application/json;charset=utf-8')
+        ...
