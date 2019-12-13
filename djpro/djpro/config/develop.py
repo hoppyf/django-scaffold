@@ -1,7 +1,3 @@
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 SECRET_KEY = 'm5o_f3rgt)_m1ihuqb*4k=)dcf&r+hb*oxms=ylm)-i$61fe)y'
 
 DEBUG = False
@@ -19,6 +15,7 @@ DATABASES = {
     }
 }
 
+# docker配置redis容器名为redis，其他情况修改为ip/域名
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",

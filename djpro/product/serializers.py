@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from common.utils import MySerializer
+from common.serializer import MySerializer
 from product.models import Book
 
 

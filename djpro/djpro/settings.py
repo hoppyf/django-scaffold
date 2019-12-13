@@ -105,7 +105,7 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'common.api.custom_exception_handler',
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
-    'DEFAULT_AUTHENTICATION_CLASSES': ('',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
