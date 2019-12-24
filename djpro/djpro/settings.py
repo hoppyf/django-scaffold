@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
-# remember to replace all 'djpro' to your own project name.
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -105,8 +105,16 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'common.api.custom_exception_handler',
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    # 默认需要登录认证，无需登录的设置permission_classes为空
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True
 }
 
 AUTH_USER_MODEL = 'user.User'

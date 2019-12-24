@@ -1,3 +1,4 @@
+import copy
 import functools
 
 from rest_framework.response import Response
@@ -48,10 +49,11 @@ def custom_exception_handler(exc, context):
     """
     response = exception_handler(exc, context)
     if response is not None:
-        response.data['code'] = response.status_code
-        response.data['msg'] = response.data['detail']
-        response.data['data'] = ''
-        del response.data['detail']
+        response.data = {
+            'code': response.status_code,
+            'msg': response.data['detail'] if 'detail' in response.data else response.data,  # 兼容jwt自定义错误返回
+            'data': ''
+        }
     response.status_code = 200  # 视情况使用与否
     return response
 
@@ -65,7 +67,7 @@ def validate(serializer):
         return R.success()
     """
 
-    def validate(func):
+    def wrapper(func):
         @functools.wraps(func)
         def handle(*args, **kwargs):
             request = args[1]
@@ -77,4 +79,4 @@ def validate(serializer):
 
         return handle
 
-    return validate
+    return wrapper
