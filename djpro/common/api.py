@@ -1,4 +1,3 @@
-import copy
 import functools
 
 from rest_framework.response import Response
