@@ -6,6 +6,10 @@ from product.serializers import BookSerializer, BookUpdateSerializer
 
 
 class BookListView(APIView):
+    """
+    书本列表
+    """
+
     def get(self, request):
         queryset = Book.filter()
         serializer = BookSerializer(queryset, many=True)
@@ -18,23 +22,24 @@ class BookListView(APIView):
 
 
 class BookView(APIView):
+    """
+    书本操作
+    """
+
     def get(self, request, pk):
         book_obj = Book.get(pk=pk)
         serializer = BookSerializer(book_obj)
         return R.success(serializer.data)
 
+    @validate(BookUpdateSerializer)
     def put(self, request, pk):
         book_obj = Book.get(pk=pk)
-        serializer = BookUpdateSerializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.data
-            for k, v in data.items():
-                if hasattr(book_obj, k):
-                    setattr(book_obj, k, v)
-            book_obj.save()
-            return R.success()
-        else:
-            return R.warn(serializer.errors)
+        data = request.value
+        for k, v in data.items():
+            if hasattr(book_obj, k):
+                setattr(book_obj, k, v)
+        book_obj.save()
+        return R.success()
 
     def delete(self, request, pk):
         book_obj = Book.get(pk=pk)

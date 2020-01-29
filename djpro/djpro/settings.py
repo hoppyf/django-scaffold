@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'common.middlewares.ErrorMiddleware',
+    # 'common.middlewares.ErrorMiddleware',
 ]
 
 ROOT_URLCONF = 'djpro.urls'
@@ -104,6 +104,7 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'common.api.custom_exception_handler',
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.AutoSchema',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     # 默认需要登录认证，无需登录的设置permission_classes为空

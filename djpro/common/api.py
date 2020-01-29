@@ -3,12 +3,15 @@ import functools
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
+from djpro import settings
+
 
 class R:
     """
     返回基类，错误码和错误内容在此处定义
     """
     ERROR = {
+        'bad_request': (400, '错误请求'),
         'auth_required': (401, '身份认证错误'),
         'permission_denied': (403, '权限不足'),
         'not_found': (404, '内容不存在'),
@@ -75,6 +78,10 @@ def validate(serializer):
                 request.value = s.data
                 request.serializer = s
                 return func(*args, **kwargs)
+            else:
+                if settings.DEBUG:
+                    return R.warn(400, s.errors)
+                return R.error('bad_request')
 
         return handle
 
